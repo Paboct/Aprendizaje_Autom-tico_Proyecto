@@ -7,28 +7,25 @@ from sklearn.preprocessing import LabelEncoder
 
 df = pd.read_csv('train_students.csv')
 print(f"Data:\n{df.head()}\n")
+
+#Information of the dataset
 print(f"Info:\n{df.info()}\n")
+
+#Información sobre la estadística
 print(f"Stadistical data:\n{df.describe()}\n")
 
-# Plotting
 # Tamaño del dataset
-print("Número de filas y columnas:", df.shape)
+print(f"Number of data: {df.shape[0]}")
+print(f"Number of features: {df.shape[1]}")
 
 # Primeras filas del dataset
-print("Primeras filas del dataset:")
-print(df.head())
+print("First files of the data frame:\n{}\n".format(df.head()))
 
 # Información general del dataset
-print("Información del dataset:")
-print(df.info())
+print(f"Dataset info\n:{df.info()}\n")
 
 # Valores nulos
-print("Valores nulos en cada columna:")
-print(df.isnull().sum())
-
-# Estadísticas descriptivas
-print("Estadísticas descriptivas:")
-print(df.describe())
+print(f"Number of null values: {df.isnull().sum()}")
 
 # Distribución de valores en columnas categóricas
 categorical_columns = ['Gender', 'Customer Type', 'Type of Travel', 'Class', 'satisfaction']
