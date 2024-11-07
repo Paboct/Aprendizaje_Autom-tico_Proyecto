@@ -19,10 +19,10 @@ print(f"Number of data: {df.shape[0]}")
 print(f"Number of features: {df.shape[1]}")
 
 # Primeras filas del dataset
-print("First files of the data frame:\n{}\n".format(df.head()))
+print("First data of the data frame:\n{}\n".format(df.head()))
 
 # Información general del dataset
-print(f"Dataset info\n:{df.info()}\n")
+print(f"Dataset info\n:{df.info}\n")
 
 # Valores nulos
 print(f"Number of null values: {df.isnull().sum()}")
