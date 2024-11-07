@@ -5,4 +5,7 @@ import matplotlib.pyplot as plt
 
 data = pd.read_csv('train_students.csv')
 print(f"Data:\n{data.head()}\n")
+print(f"Info:\n{data.info()}\n")
 print(f"Stadistical data:\n{data.describe()}\n")
+
+# Plotting
