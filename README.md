@@ -1,1 +1,1 @@
-# Aprendizaje_Autom-tico_Proyecto
+# Aprendizaje_Automtico_Proyecto
