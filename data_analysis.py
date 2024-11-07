@@ -9,3 +9,4 @@ print(f"Info:\n{data.info()}\n")
 print(f"Stadistical data:\n{data.describe()}\n")
 
 # Plotting
+#prueba david
