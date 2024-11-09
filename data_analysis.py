@@ -6,10 +6,10 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
 df = pd.read_csv('train_students.csv')
-print(f"Data:\n{df.head()}\n")
+print(f"First data of the DataFrame:\n{df.head()}\n")
 
 #Information of the dataset
-print(f"Info:\n{df.info()}\n")
+print(f"Info:\n{df.info}\n")
 
 #Información sobre la estadística
 print(f"Stadistical data:\n{df.describe()}\n")
@@ -18,45 +18,38 @@ print(f"Stadistical data:\n{df.describe()}\n")
 print(f"Number of data: {df.shape[0]}")
 print(f"Number of features: {df.shape[1]}")
 
-# Primeras filas del dataset
-print("First data of the data frame:\n{}\n".format(df.head()))
-
-# Información general del dataset
-print(f"Dataset info\n:{df.info}\n")
-
 # Valores nulos
-print(f"Number of null values: {df.isnull().sum()}")
+print(f"Number of null values per feature:\n{df.isnull().sum()}\n")
 
 # Distribución de valores en columnas categóricas
 categorical_columns = ['Gender', 'Customer Type', 'Type of Travel', 'Class', 'satisfaction']
 for col in categorical_columns:
-    print(f"Distribución de valores en {col}:")
-    print(df[col].value_counts())
-    print()
+    print(f"Distribución de valores en {col}:\n{df[col].value_counts()}\n")
 
 # Distribución de edad
 plt.figure(figsize=(10, 5))
-sns.histplot(df['Age'], bins=20, kde=True)
+df['Age'].plot(kind='hist', bins=20, color='blue', alpha=0.7, width=3, align='mid')
 plt.title("Distribución de Edad")
 plt.xlabel("Edad")
 plt.ylabel("Frecuencia")
-plt.show()
+plt.xticks(np.arange(0, 90, 5))
 
 # Distribución de la distancia del vuelo
 plt.figure(figsize=(10, 5))
-sns.histplot(df['Flight Distance'], bins=20, kde=True)
+df['Flight Distance'].plot(kind='hist', bins=20, color='blue', alpha=0.7, width=100, align='mid')
 plt.title("Distribución de la Distancia del Vuelo")
 plt.xlabel("Distancia")
 plt.ylabel("Frecuencia")
-plt.show()
+plt.axis([0, 5000, 0, 20000])
+plt.xticks(np.arange(0, 5000, 250))
+plt.yticks(np.arange(0, 20000, 1000))
 
 # Distribución de la satisfacción
 plt.figure(figsize=(6, 4))
-sns.countplot(data=df, x='satisfaction')
+df['satisfaction'].value_counts().plot(kind='bar', color='blue', alpha=0.7, align='center')
 plt.title("Distribución de la Satisfacción del Pasajero")
 plt.xlabel("Satisfacción")
 plt.ylabel("Número de Pasajeros")
-plt.show()
 
 # Codificar las variables categóricas con Label Encoding
 categorical_columns = ['Gender', 'Customer Type', 'Type of Travel', 'Class', 'satisfaction']
