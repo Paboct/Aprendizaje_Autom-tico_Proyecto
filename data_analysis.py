@@ -7,7 +7,6 @@ from sklearn.preprocessing import LabelEncoder
 
 df = pd.read_csv('train_students.csv')
 print(f"First data of the DataFrame:\n{df.head()}\n")
-
 #Information of the dataset
 print(f"Info:\n{df.info}\n")
 
