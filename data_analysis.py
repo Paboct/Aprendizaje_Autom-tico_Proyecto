@@ -7,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 
 df = pd.read_csv('train_students.csv')
 print(f"First data of the DataFrame:\n{df.head()}\n")
+print(df['Class'].value_counts())
 #Information of the dataset
 print(f"Info:\n{df.info}\n")
 
@@ -63,4 +64,12 @@ numerical_df = df.select_dtypes(include=['int64', 'float64'])
 plt.figure(figsize=(15, 10))
 sns.heatmap(numerical_df.corr(), annot=True, cmap="coolwarm", fmt=".2f")
 plt.title("Matriz de Correlación entre Variables Numéricas (con variables categóricas codificadas)")
+
+# Catplot de la distancia de vuelo por tipo de cliente y clase
+df['Class'] = df['Class'].replace({0: 'Business', 1: 'Eco', 2: 'Eco Plus'})
+df['Customer Type'] = df['Customer Type'].replace({0: 'Loyal Customer', 1: 'disloyal Customer'})
+sns.catplot(x='Customer Type', y='Flight Distance', hue='Class', data=df, kind='bar')
+plt.title("Distancia de Vuelo por Tipo de Cliente y Clase")
+plt.xlabel("Tipo de Cliente")
+plt.ylabel("Distancia de Vuelo")
 plt.show()
