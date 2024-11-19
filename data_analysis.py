@@ -83,4 +83,43 @@ sns.countplot(data=df, x='satisfaction', hue='Class')
 plt.title("Satisfacción por Clase")
 plt.xlabel("Satisfaction")
 plt.ylabel("Total")
+
+#Histograma de la distancia de vuelo por satisfacción
+sns.histplot(data=df, x='Flight Distance', kde=True, hue='satisfaction', alpha=0.4,  palette='viridis')
+plt.title("Distribución de la Distancia de Vuelo por Satisfacción")
+plt.xlabel("Distancia de Vuelo")
+plt.ylabel("Total")
+plt.axis([0,5000,0,3500])
+
+#Histograma satisfacción por limpieza
+plt.figure(figsize=(10, 6))
+sns.countplot(data=df, x='Cleanliness', hue='satisfaction', palette='viridis')
+plt.title('Customer Satisfaction by Cleanliness')
+plt.xlabel('Cleanliness Rating')
+plt.ylabel('Count')
+plt.legend(title='Satisfaction Level')
+
+plt.figure(figsize=(10, 6))
+sns.countplot(data=df, x='Ease of Online booking', hue='satisfaction', palette='viridis')
+plt.title('Customer Satisfaction by Ease of Online Booking')
+plt.xlabel('Ease of Online Booking Rating')
+plt.ylabel('Number of Customers')
+plt.legend(title='Satisfaction Level')
+
+#Hacer catplots respecto a la satisfaccción para cada columna categórica
+#Como incluir todas las columnas menos la de satisfacción
+#cols = df.drop('satisfaction', axis=1).columns
+
+cols = df.select_dtypes(include=['object']).columns
+print(cols)
+
+plt.figure(figsize=(12, 18))
+
+for i, col in enumerate(cols):
+    plt.subplot(4, 6, i + 1)  
+    sns.countplot(data=df, x=col, hue='satisfaction', palette = "Set1")
+    plt.title(f'Satisfacción respecto {col}')
+
+plt.tight_layout()
+
 plt.show()
