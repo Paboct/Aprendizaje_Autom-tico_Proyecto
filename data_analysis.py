@@ -75,11 +75,6 @@ plt.title("Distancia de Vuelo por Tipo de Cliente y Clase")
 plt.xlabel("Tipo de Cliente")
 plt.ylabel("Distancia de Vuelo")
 
-# Hacer un plot sobre la satisfacción por edad y tipo de viaje
-#plt.figure(figsize=(10, 5))
-sns.catplot(x='satisfaction', y='Age', col='Type of Travel', data=df, kind='box')
-plt.suptitle("Satisfacción por Edad y Tipo de Viaje")
-
 ## Hacer un plot sobre el tipo de clase y su satisfacción
 df['satisfaction'] = df['satisfaction'].replace({0:'neutral or dissatisfied', 1:'satisfied'})
 
