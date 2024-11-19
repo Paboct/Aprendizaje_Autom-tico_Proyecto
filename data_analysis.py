@@ -112,7 +112,7 @@ plt.legend(title='Satisfaction Level')
 
 cols = df.select_dtypes(include=['object']).columns
 
-plt.figure(figsize=(12, 18))
+plt.figure(figsize=(10,6))
 
 for i, col in enumerate(cols):
     plt.subplot(1, 3, i + 1)  
