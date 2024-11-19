@@ -111,7 +111,7 @@ plt.legend(title='Satisfaction Level')
 #cols = df.drop('satisfaction', axis=1).columns
 
 cols = df.select_dtypes(include=['object']).columns
-print(cols)
+
 
 plt.figure(figsize=(12, 18))
 
