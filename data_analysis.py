@@ -120,5 +120,5 @@ for i, col in enumerate(cols):
     plt.title(f'Satisfacción respecto {col}')
 
 plt.tight_layout()
-
+print()
 plt.show()
