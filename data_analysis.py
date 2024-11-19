@@ -116,7 +116,7 @@ print(cols)
 plt.figure(figsize=(12, 18))
 
 for i, col in enumerate(cols):
-    plt.subplot(4, 6, i + 1)  
+    plt.subplot(1, 3, i + 1)  
     sns.countplot(data=df, x=col, hue='satisfaction', palette = "Set1")
     plt.title(f'Satisfacción respecto {col}')
 
