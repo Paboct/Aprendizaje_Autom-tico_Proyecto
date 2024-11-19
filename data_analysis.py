@@ -50,8 +50,9 @@ df['satisfaction'].value_counts().plot(kind='bar', color='blue', alpha=0.7, alig
 plt.title("Distribución de la Satisfacción del Pasajero")
 plt.xlabel("Satisfacción")
 plt.ylabel("Número de Pasajeros")
+plt.xticks(rotation=0)
 
-# Codificar las variables categóricas con Label Encoding
+# Codificar las variables categóricas con Label Encoding para hacer la matriz de correlación
 categorical_columns = ['Gender', 'Customer Type', 'Type of Travel', 'Class', 'satisfaction']
 le = LabelEncoder()
 for col in categorical_columns:
@@ -60,13 +61,13 @@ for col in categorical_columns:
 # Seleccionar solo las columnas numéricas para calcular la correlación
 numerical_df = df.select_dtypes(include=['int64', 'float64'])
 
-# Calcular la matriz de correlación
+# Matriz de correlación
 plt.figure(figsize=(15, 10))
 sns.heatmap(numerical_df.corr(), annot=True, cmap="coolwarm", fmt=".2f")
 plt.title("Matriz de Correlación entre Variables Numéricas (con variables categóricas codificadas)")
 
-# Catplot de la distancia de vuelo por tipo de cliente y clase
-# Necesito reemplazar los valores numéricos por los valores originales
+# Countplot sobre la distancia de vuelo según la lealtad del cliente, agrupado por Clase
+# Necesito reemplazar los valores numéricos por los valores originales. Para ello sustituyo por sus valores originales
 df['Class'] = df['Class'].replace({0: 'Business', 1: 'Eco', 2: 'Eco Plus'})
 df['Customer Type'] = df['Customer Type'].replace({0: 'Loyal Customer', 1: 'disloyal Customer'})
 
@@ -75,7 +76,7 @@ plt.title("Distancia de Vuelo por Tipo de Cliente y Clase")
 plt.xlabel("Tipo de Cliente")
 plt.ylabel("Distancia de Vuelo")
 
-## Hacer un plot sobre el tipo de clase y su satisfacción
+# Distribución satisfacción según clase
 df['satisfaction'] = df['satisfaction'].replace({0:'neutral or dissatisfied', 1:'satisfied'})
 
 plt.figure(figsize=(10, 5))
@@ -85,13 +86,14 @@ plt.xlabel("Satisfaction")
 plt.ylabel("Total")
 
 #Histograma de la distancia de vuelo por satisfacción
+plt.figure(figsize=(10,5))
 sns.histplot(data=df, x='Flight Distance', kde=True, hue='satisfaction', alpha=0.4,  palette='viridis')
 plt.title("Distribución de la Distancia de Vuelo por Satisfacción")
 plt.xlabel("Distancia de Vuelo")
 plt.ylabel("Total")
 plt.axis([0,5000,0,3500])
 
-#Histograma satisfacción por limpieza
+#Distribución satisfacción por limpieza
 plt.figure(figsize=(10, 6))
 sns.countplot(data=df, x='Cleanliness', hue='satisfaction', palette='viridis')
 plt.title('Customer Satisfaction by Cleanliness')
@@ -99,6 +101,7 @@ plt.xlabel('Cleanliness Rating')
 plt.ylabel('Count')
 plt.legend(title='Satisfaction Level')
 
+# Countplot satisfacción por booking online
 plt.figure(figsize=(10, 6))
 sns.countplot(data=df, x='Ease of Online booking', hue='satisfaction', palette='viridis')
 plt.title('Customer Satisfaction by Ease of Online Booking')
@@ -106,10 +109,7 @@ plt.xlabel('Ease of Online Booking Rating')
 plt.ylabel('Number of Customers')
 plt.legend(title='Satisfaction Level')
 
-#Hacer catplots respecto a la satisfaccción para cada columna categórica
-#Como incluir todas las columnas menos la de satisfacción
-#cols = df.drop('satisfaction', axis=1).columns
-
+#Hacer catplots respecto a la satisfacción para cada columna categórica
 cols = df.select_dtypes(include=['object']).columns
 
 plt.figure(figsize=(10,6))
