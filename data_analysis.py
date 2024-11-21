@@ -152,5 +152,8 @@ for col in study_columns:
     plt.ylabel("Número de clientes")
     plt.legend(title="Nivel de satisfacción")
     
+# Distribucion de los Retrasos
+
+
 
 plt.show()
