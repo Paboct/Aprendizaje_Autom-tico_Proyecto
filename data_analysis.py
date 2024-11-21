@@ -93,18 +93,6 @@ plt.xlabel("Distancia de Vuelo")
 plt.ylabel("Total")
 plt.axis([0,5000,0,3500])
 
-#Hacer catplots respecto a la satisfacción para cada columna categórica
-cols_object = df.select_dtypes(include=['object']).drop(columns='satisfaction').columns
-
-plt.figure(figsize=(10,6))
-
-for i, col in enumerate(cols_object):
-    plt.subplot(1, 2, i + 1)  
-    sns.countplot(data=df, x=col, hue='satisfaction', palette = "Set1")
-    plt.title(f'Satisfacción respecto {col}')
-
-plt.tight_layout()
-
 # Agrupar datos por género y satisfacción
 df['Gender'] = df['Gender'].replace({0:'Female', 1:'Male'})
 satisfaction_gender = df.groupby(['Gender', 'satisfaction']).size()
