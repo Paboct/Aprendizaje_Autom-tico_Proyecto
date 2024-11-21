@@ -139,16 +139,21 @@ plt.tight_layout()
 #Gráficas respecto a satisfacción
 study_columns = df.iloc[:, 7:-3].columns
 
-for col in study_columns:
-    plt.figure(figsize=(10, 6))
+plt.figure(figsize=(20, 20))
+plt.title("Satisfacción respecto a:", pad=25)
 
+for i, col in enumerate(study_columns):
     grouped_data = df.groupby(['satisfaction', col]).size().reset_index(name='count')
     
+    plt.subplot(3, 5, i+1)
     sns.barplot(data=grouped_data, x=col, y='count', hue='satisfaction', palette='viridis')
-    plt.title(f"Satisfacción respecto a {col}")
-    plt.xlabel(col)
+    plt.title(f"{col}")
+    #plt.xlabel(col)
     plt.ylabel("Número de clientes")
     plt.legend(title="Nivel de satisfacción")
+
+plt.tight_layout()
+plt.subplots_adjust(hspace=0.5)
 
 #Distribucion de Retrasos
 # Filtrar los datos para excluir los retrasos igual a 0
