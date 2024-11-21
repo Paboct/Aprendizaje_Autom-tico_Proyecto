@@ -151,4 +151,5 @@ for col in study_columns:
     plt.xlabel(col)
     plt.ylabel("Número de clientes")
     plt.legend(title="Nivel de satisfacción")
+
 plt.show()
