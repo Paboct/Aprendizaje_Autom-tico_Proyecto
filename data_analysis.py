@@ -188,8 +188,4 @@ plt.xlim(0, 300)  # Ajustar el rango según sea necesario
 plt.grid(axis='y', linestyle='--', alpha=0.7)
 plt.xticks(np.arange(0, 300, 10))
 
-
-
-
-
 plt.show()
