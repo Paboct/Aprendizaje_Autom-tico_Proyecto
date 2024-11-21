@@ -88,39 +88,23 @@ plt.ylabel("Total")#
 
 #Histograma de la distancia de vuelo por satisfacción
 plt.figure(figsize=(10,5))
-#sns.histplot(data=df, x='Flight Distance', kde=True, hue='satisfaction', alpha=0.4,  palette='viridis')
-#plt.title("Distribución de la Distancia de Vuelo por Satisfacción")
-#plt.xlabel("Distancia de Vuelo")
-#plt.ylabel("Total")
-#plt.axis([0,5000,0,3500])##
-
-#Distribución satisfacción por limpieza
-#plt.figure(figsize=(10, 6))
-#sns.countplot(data=df, x='Cleanliness', hue='satisfaction', palette='viridis')
-#plt.title('Customer Satisfaction by Cleanliness')
-#plt.xlabel('Cleanliness Rating')
-#plt.ylabel('Count')
-#plt.legend(title='Satisfaction Level')##
-
-## Countplot satisfacción por booking online
-#plt.figure(figsize=(10, 6))
-#sns.countplot(data=df, x='Ease of Online booking', hue='satisfaction', palette='viridis')
-#plt.title('Customer Satisfaction by Ease of Online Booking')
-#plt.xlabel('Ease of Online Booking Rating')
-#plt.ylabel('Number of Customers')
-#plt.legend(title='Satisfaction Level')
+sns.histplot(data=df, x='Flight Distance', kde=True, hue='satisfaction', alpha=0.4,  palette='viridis')
+plt.title("Distribución de la Distancia de Vuelo por Satisfacción")
+plt.xlabel("Distancia de Vuelo")
+plt.ylabel("Total")
+plt.axis([0,5000,0,3500])
 
 #Hacer catplots respecto a la satisfacción para cada columna categórica
 cols_object = df.select_dtypes(include=['object']).drop(columns='satisfaction').columns
 
-#plt.figure(figsize=(10,6))
-#
-#for i, col in enumerate(cols_object):
-#    plt.subplot(1, 2, i + 1)  
-#    sns.countplot(data=df, x=col, hue='satisfaction', palette = "Set1")
-#    plt.title(f'Satisfacción respecto {col}')
-#
-#plt.tight_layout()
+plt.figure(figsize=(10,6))
+
+for i, col in enumerate(cols_object):
+    plt.subplot(1, 2, i + 1)  
+    sns.countplot(data=df, x=col, hue='satisfaction', palette = "Set1")
+    plt.title(f'Satisfacción respecto {col}')
+
+plt.tight_layout()
 
 # Agrupar datos por género y satisfacción
 df['Gender'] = df['Gender'].replace({0:'Female', 1:'Male'})
@@ -142,22 +126,22 @@ female_colors = sns.light_palette("red", n_colors=len(female_labels))
 male_colors = sns.light_palette("blue", n_colors=len(male_labels))
 
 # Crear la figura y los gráficos
-#fig, axes = plt.subplots(1, 2, figsize=(16, 8))
-#
-## Gráfico para mujeres
-#axes[0].pie(female_sizes, labels=female_labels, autopct='%1.1f%%', colors=female_colors)
-#axes[0].set_title("Satisfacción - Mujeres")
-#
-## Gráfico para hombres
-#axes[1].pie(male_sizes, labels=male_labels, autopct='%1.1f%%', colors=male_colors)
-#axes[1].set_title("Satisfacción - Hombres")
-#
-#plt.tight_layout()
-#
-# Gráficas respecto a satisfacción
-columns_of_interest = df.iloc[:, 7:-3].columns
+fig, axes = plt.subplots(1, 2, figsize=(16, 8))
 
-for col in columns_of_interest:
+# Gráfico para mujeres
+#axes[0].pie(female_sizes, labels=female_labels, autopct='%1.1f%%', colors=female_colors)
+axes[0].set_title("Satisfacción - Mujeres")
+
+# Gráfico para hombres
+axes[1].pie(male_sizes, labels=male_labels, autopct='%1.1f%%', colors=male_colors)
+axes[1].set_title("Satisfacción - Hombres")
+
+plt.tight_layout()
+
+#Gráficas respecto a satisfacción
+study_columns = df.iloc[:, 7:-3].columns
+
+for col in study_columns:
     plt.figure(figsize=(10, 6))
 
     grouped_data = df.groupby(['satisfaction', col]).size().reset_index(name='count')
