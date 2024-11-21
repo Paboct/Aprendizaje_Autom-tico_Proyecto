@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
 df = pd.read_csv('train_students.csv')
+print(df['Gender'].value_counts())
 print(f"First data of the DataFrame:\n{df.head()}\n")
 print(df['Class'].value_counts())
 #Information of the dataset
@@ -83,42 +84,89 @@ plt.figure(figsize=(10, 5))
 sns.countplot(data=df, x='satisfaction', hue='Class')
 plt.title("Satisfacción por Clase")
 plt.xlabel("Satisfaction")
-plt.ylabel("Total")
+plt.ylabel("Total")#
 
 #Histograma de la distancia de vuelo por satisfacción
 plt.figure(figsize=(10,5))
-sns.histplot(data=df, x='Flight Distance', kde=True, hue='satisfaction', alpha=0.4,  palette='viridis')
-plt.title("Distribución de la Distancia de Vuelo por Satisfacción")
-plt.xlabel("Distancia de Vuelo")
-plt.ylabel("Total")
-plt.axis([0,5000,0,3500])
+#sns.histplot(data=df, x='Flight Distance', kde=True, hue='satisfaction', alpha=0.4,  palette='viridis')
+#plt.title("Distribución de la Distancia de Vuelo por Satisfacción")
+#plt.xlabel("Distancia de Vuelo")
+#plt.ylabel("Total")
+#plt.axis([0,5000,0,3500])##
 
 #Distribución satisfacción por limpieza
-plt.figure(figsize=(10, 6))
-sns.countplot(data=df, x='Cleanliness', hue='satisfaction', palette='viridis')
-plt.title('Customer Satisfaction by Cleanliness')
-plt.xlabel('Cleanliness Rating')
-plt.ylabel('Count')
-plt.legend(title='Satisfaction Level')
+#plt.figure(figsize=(10, 6))
+#sns.countplot(data=df, x='Cleanliness', hue='satisfaction', palette='viridis')
+#plt.title('Customer Satisfaction by Cleanliness')
+#plt.xlabel('Cleanliness Rating')
+#plt.ylabel('Count')
+#plt.legend(title='Satisfaction Level')##
 
-# Countplot satisfacción por booking online
-plt.figure(figsize=(10, 6))
-sns.countplot(data=df, x='Ease of Online booking', hue='satisfaction', palette='viridis')
-plt.title('Customer Satisfaction by Ease of Online Booking')
-plt.xlabel('Ease of Online Booking Rating')
-plt.ylabel('Number of Customers')
-plt.legend(title='Satisfaction Level')
+## Countplot satisfacción por booking online
+#plt.figure(figsize=(10, 6))
+#sns.countplot(data=df, x='Ease of Online booking', hue='satisfaction', palette='viridis')
+#plt.title('Customer Satisfaction by Ease of Online Booking')
+#plt.xlabel('Ease of Online Booking Rating')
+#plt.ylabel('Number of Customers')
+#plt.legend(title='Satisfaction Level')
 
 #Hacer catplots respecto a la satisfacción para cada columna categórica
-cols = df.select_dtypes(include=['object']).columns
+cols_object = df.select_dtypes(include=['object']).drop(columns='satisfaction').columns
 
-plt.figure(figsize=(10,6))
+#plt.figure(figsize=(10,6))
+#
+#for i, col in enumerate(cols_object):
+#    plt.subplot(1, 2, i + 1)  
+#    sns.countplot(data=df, x=col, hue='satisfaction', palette = "Set1")
+#    plt.title(f'Satisfacción respecto {col}')
+#
+#plt.tight_layout()
 
-for i, col in enumerate(cols):
-    plt.subplot(1, 3, i + 1)  
-    sns.countplot(data=df, x=col, hue='satisfaction', palette = "Set1")
-    plt.title(f'Satisfacción respecto {col}')
+# Agrupar datos por género y satisfacción
+df['Gender'] = df['Gender'].replace({0:'Female', 1:'Male'})
+satisfaction_gender = df.groupby(['Gender', 'satisfaction']).size()
+print(satisfaction_gender)
+# Dividir los datos por género
+female_data = satisfaction_gender['Female']
+male_data = satisfaction_gender['Male']
 
-plt.tight_layout()
+# Crear etiquetas y tamaños para cada género
+female_labels = [f"{sat}" for sat in female_data.index]
+female_sizes = female_data.values
+
+male_labels = [f"{sat}" for sat in male_data.index]
+male_sizes = male_data.values
+
+# Crear paletas de colores para cada género
+female_colors = sns.light_palette("red", n_colors=len(female_labels))
+male_colors = sns.light_palette("blue", n_colors=len(male_labels))
+
+# Crear la figura y los gráficos
+#fig, axes = plt.subplots(1, 2, figsize=(16, 8))
+#
+## Gráfico para mujeres
+#axes[0].pie(female_sizes, labels=female_labels, autopct='%1.1f%%', colors=female_colors)
+#axes[0].set_title("Satisfacción - Mujeres")
+#
+## Gráfico para hombres
+#axes[1].pie(male_sizes, labels=male_labels, autopct='%1.1f%%', colors=male_colors)
+#axes[1].set_title("Satisfacción - Hombres")
+#
+#plt.tight_layout()
+#
+# Gráficas respecto a satisfacción
+columns_of_interest = df.iloc[:, 7:-3].columns
+
+for col in columns_of_interest:
+    plt.figure(figsize=(10, 6))
+
+    grouped_data = df.groupby(['satisfaction', col]).size().reset_index(name='count')
+    
+    sns.barplot(data=grouped_data, x=col, y='count', hue='satisfaction', palette='viridis')
+    plt.title(f"Satisfacción respecto a {col}")
+    plt.xlabel(col)
+    plt.ylabel("Número de clientes")
+    plt.legend(title="Nivel de satisfacción")
+    
 
 plt.show()
