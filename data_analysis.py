@@ -68,7 +68,6 @@ sns.heatmap(numerical_df.corr(), annot=True, cmap="coolwarm", fmt=".2f")
 plt.title("Matriz de Correlación entre Variables Numéricas (con variables categóricas codificadas)")
 
 # Countplot sobre la distancia de vuelo según la lealtad del cliente, agrupado por Clase
-# Necesito reemplazar los valores numéricos por los valores originales. Para ello sustituyo por sus valores originales
 df['Class'] = df['Class'].replace({0: 'Business', 1: 'Eco', 2: 'Eco Plus'})
 df['Customer Type'] = df['Customer Type'].replace({0: 'Loyal Customer', 1: 'disloyal Customer'})
 
@@ -109,7 +108,6 @@ plt.tight_layout()
 # Agrupar datos por género y satisfacción
 df['Gender'] = df['Gender'].replace({0:'Female', 1:'Male'})
 satisfaction_gender = df.groupby(['Gender', 'satisfaction']).size()
-print(satisfaction_gender)
 # Dividir los datos por género
 female_data = satisfaction_gender['Female']
 male_data = satisfaction_gender['Male']
@@ -129,7 +127,7 @@ male_colors = sns.light_palette("blue", n_colors=len(male_labels))
 fig, axes = plt.subplots(1, 2, figsize=(16, 8))
 
 # Gráfico para mujeres
-#axes[0].pie(female_sizes, labels=female_labels, autopct='%1.1f%%', colors=female_colors)
+axes[0].pie(female_sizes, labels=female_labels, autopct='%1.1f%%', colors=female_colors)
 axes[0].set_title("Satisfacción - Mujeres")
 
 # Gráfico para hombres
