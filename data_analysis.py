@@ -152,4 +152,44 @@ for col in study_columns:
     plt.ylabel("Número de clientes")
     plt.legend(title="Nivel de satisfacción")
 
+#Distribucion de Retrasos
+# Filtrar los datos para excluir los retrasos igual a 0
+delayed_df = df[(df['Departure Delay in Minutes'] > 0) | (df['Arrival Delay in Minutes'] > 0)]
+
+# Gráfico de barras para los retrasos en la salida
+plt.figure(figsize=(10, 5))
+plt.hist(
+    delayed_df['Departure Delay in Minutes'].dropna(),
+    bins=125,
+    color='blue',
+    alpha=0.7,
+    edgecolor='black',
+)
+plt.title("Distribución de los Retrasos en la Salida")
+plt.xlabel("Retraso en Minutos")
+plt.ylabel("Frecuencia")
+plt.xlim(0, 300)  # Ajustar el rango según sea necesario
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.xticks(np.arange(0, 300, 10))
+
+# Gráfico de barras para los retrasos en la llegada
+plt.figure(figsize=(10, 5))
+plt.hist(
+    delayed_df['Arrival Delay in Minutes'].dropna(),
+    bins=125,
+    color='orange',
+    alpha=0.7,
+    edgecolor='black',
+)
+plt.title("Distribución de los Retrasos en la Llegada")
+plt.xlabel("Retraso en Minutos")
+plt.ylabel("Frecuencia")
+plt.xlim(0, 300)  # Ajustar el rango según sea necesario
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.xticks(np.arange(0, 300, 10))
+
+
+
+
+
 plt.show()
