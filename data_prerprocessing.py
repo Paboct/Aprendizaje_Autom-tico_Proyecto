@@ -191,6 +191,10 @@ plt.show()
 df_accuracies = pd.DataFrame(ACCURACIES)
 print(df_accuracies,"\nAlgunas Predicciones:")
 
+# Pásamos los data frames a ficheros csv
+df_preprocessed_1.to_csv('train_students_preprocessed_standard.csv', index=False)
+df_preprocessed_2.to_csv('train_students_preprocessed_minmax.csv', index=False)
+
 #example = pd.DataFrame({
 #   'id': [12345],
 #   'Gender': ['Female'],
