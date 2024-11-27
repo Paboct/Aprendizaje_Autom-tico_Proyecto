@@ -7,6 +7,8 @@ from sklearn.feature_selection import RFE
 from sklearn.linear_model import LogisticRegression
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
+import shap
+import matplotlib.pyplot as plt
 
 
 #Selector pertenece a {'KBest', 'RFE', 'PCA'} y Normalization a {'Minmax', 'Standard'}
@@ -65,20 +67,59 @@ y = data_original.iloc[:,-1].values
 
 #Minmax
 df_minmax = pd.read_csv('train_students_preprocessed_minmax.csv')
-print(f"Minmax")
-model_cs(select_kbest(df_minmax, y, 4), y, "MinMaxScaler", "SelectKBest(4)")
-model_cs(select_kbest(df_minmax, y, 6), y, "MinMaxScaler", "SelectKBest(6)")
-model_cs(select_rfe(df_minmax, y, 4), y, "MinMaxScaler", "RFE(4)")
-model_cs(select_rfe(df_minmax, y, 6), y, "MinMaxScaler", "RFE(6)")
-model_cs(select_pca(df_minmax, 4), y, "MinMaxScaler", "PCA(4)")
-model_cs(select_pca(df_minmax, 6), y, "MinMaxScaler", "PCA(6)")
+#Eliminamos la columna de etiquetas
+df_minmax = df_minmax.drop(columns='satisfaction')
+
+print('MinMax')
+model_cs(select_kbest(df_minmax, y, 20), y, "MinMaxScaler", "SelectKBest(20)")
+model_cs(select_kbest(df_minmax, y, 18), y, "MinMaxScaler", "SelectKBest(18)")
+model_cs(select_rfe(df_minmax, y, 20), y, "MinMaxScaler", "RFE(20)")
+model_cs(select_rfe(df_minmax, y, 18), y, "MinMaxScaler", "RFE(18)")
+model_cs(select_pca(df_minmax, 20), y, "MinMaxScaler", "PCA(20)")
+model_cs(select_pca(df_minmax, 16), y, "MinMaxScaler", "PCA(18)")
 
 #Standard
 df_standard = pd.read_csv('train_students_preprocessed_standard.csv')
+#Eliminamos la columna de etiquetas
+df_standard = df_standard.drop(columns='satisfaction')
+
 print('Standard')
-model_cs(select_kbest(df_standard, y, 4, f_classif), y, "StandardScaler", "SelectKBest(4)")
-model_cs(select_kbest(df_standard, y, 6, f_classif), y, "StandardScaler", "SelectKBest(6)")
-model_cs(select_rfe(df_standard, y, 4), y, "StandardScaler", "RFE(4)")
-model_cs(select_rfe(df_standard, y, 6), y, "StandardScaler", "RFE(6)")
-model_cs(select_pca(df_standard, 4), y, "StandardScaler", "PCA(4)")
-model_cs(select_pca(df_standard, 6), y, "StandardScaler", "PCA(6)")
+model_cs(select_kbest(df_standard, y, 20, f_classif), y, "StandardScaler", "SelectKBest(20)")
+model_cs(select_kbest(df_standard, y, 18, f_classif), y, "StandardScaler", "SelectKBest(18)")
+model_cs(select_rfe(df_standard, y, 20), y, "StandardScaler", "RFE(20)")
+model_cs(select_rfe(df_standard, y, 18), y, "StandardScaler", "RFE(18)")
+model_cs(select_pca(df_standard, 20), y, "StandardScaler", "PCA(20)")
+model_cs(select_pca(df_standard, 16), y, "StandardScaler", "PCA(18)")
+
+#Gráfica de SHAP
+#Probamos los selectores de características con los conjuntos de datos de minmax y standard
+df_min_max_best = select_kbest(df_minmax, y, 20)
+df_standard_best = select_kbest(df_standard, y, 20, f_classif)
+
+#Hacemos el modelo
+model_min_max = LogisticRegression().fit(df_min_max_best, y)
+model_standard = LogisticRegression().fit(df_standard_best, y)
+
+#Hacmos el explainer
+explainer_minmax = shap.Explainer(model_min_max, df_min_max_best)
+explainer_standard = shap.Explainer(model_standard, df_standard_best)
+
+#Calculamos los valores SHAP
+shap_values_minmax = explainer_minmax(df_min_max_best)
+shap_values_standard = explainer_standard(df_standard_best)
+
+#Graficamos
+plt.figure(figsize=(14, 16))
+plt.suptitle("SHAP values for the best features selected by KBEST", fontsize=20)
+
+plt.subplot(2, 1, 1)
+#shap.plots.beeswarm(shap_values_minmax, max_display=16, show=False)
+shap.summary_plot(shap_values_minmax, df_min_max_best, plot_type="bar", color="red", show=False)
+plt.title("MinMaxScaler - Best 16 Features")
+
+plt.subplot(2, 1, 2)
+#shap.plots.beeswarm(shap_values_standard, max_display=16, show=False)
+shap.summary_plot(shap_values_standard, df_standard_best, plot_type="bar", color="blue", show=False)
+plt.title("StandardScaler - Best 16 Features")
+
+plt.show()
