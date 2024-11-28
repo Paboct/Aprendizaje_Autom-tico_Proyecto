@@ -10,10 +10,12 @@ from sklearn.impute import KNNImputer
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
+# Diccionario para guardar las métricas de los modelos
 ACCURACIES = {'Model': [], 'Accuracy': [], 'Train Score': [], 'Test Score': []}
 
 # Carga el conjunto de datos
 data = pd.read_csv('train_students.csv')
+
 
 def transform_data_min_max(df: pd.DataFrame, labels_encoded: dict, scaler:MinMaxScaler) -> pd.DataFrame:
     """
@@ -74,12 +76,16 @@ def LR_model(df:pd.DataFrame, model:str) -> LogisticRegression:
 
     return LR
 
+
+
+'''
 #Creación de nuevas características
-#Total Delay
+'''
+#1. Total Delay
 #data['Total Delay'] = data['Departure Delay in Minutes'] + data['Arrival Delay in Minutes']
 #data.drop(columns=['Departure Delay in Minutes', 'Arrival Delay in Minutes'], inplace=True)
 
-#Age en rangos
+#2. Age en rangos
 ranges = [0, 18, 35, 60, 100]
 labels = ['Joven', 'Adulto Joven', 'Adulto', 'Adulto Mayor']
 
@@ -90,72 +96,76 @@ data.drop(columns='Age', inplace=True)
 #print(data['Age Groups'].value_counts().sum)
 #print(data.head(30))
 
-#Distancia en rangos
+#3. Distancia en rangos
 ranges = [0, 500, 1500, 3000, 5000, 10000]
 labels = ['Short', 'Medium', 'Long', 'Very Long', 'Ultra Long']
 
 data['Distance Range'] = pd.cut(data['Flight Distance'], bins=ranges, labels=labels)
 data.drop(columns='Flight Distance', inplace=True)
 
-#Comfort Total
-data['Comfort Total'] = data['Seat comfort'] + data['Inflight entertainment'] + data['Inflight service'] + data['Leg room service']
-data.drop(columns=['Seat comfort', 'Inflight entertainment', 'Inflight service', 'Leg room service'], inplace=True)
+#4. Comfort Total
+data['Comfort Total'] = (data['Seat comfort'] + data['Inflight entertainment'] + data['Inflight service'] + data['Leg room service'] + data['On-board service'] + data['Cleanliness'] + data['Food and drink'] + data['Baggage handling'] + data['Checkin service'] + data['Inflight wifi service'] + data['Ease of Online booking'] + data['Departure/Arrival time convenient'] + data['Gate location'])/13
+data.drop(columns= ['Seat comfort', 'Inflight entertainment', 'Inflight service', 'Leg room service', 'On-board service', 'Cleanliness', 'Food and drink', 'Baggage handling', 'Checkin service', 'Inflight wifi service', 'Ease of Online booking', 'Departure/Arrival time convenient', 'Gate location'], inplace=True)
 
+'''
 #LIMPIEZA DE DATOS
-# Manejo de valores nulos
-#Rellenando con la media
+'''
+#1 Manejo de valores nulos
+#1.1 Rellenando con la media
 mean_delay = data['Arrival Delay in Minutes'].mean()
 df_preprocessed_1 = data.copy()
 df_preprocessed_1['Arrival Delay in Minutes'].fillna(mean_delay, inplace=True)
 
 
-#Para Total Delay
+#1.2 Para Total Delay
 #df_preprocessed_1 = data.fillna(data['Total Delay'].mean())
 #print(df_preprocessed_1.isnull().sum())
 
-#Eliminando los valores nulos
+#1.3 Eliminando los valores nulos
 #df_preprocessed_1 = data.dropna()
 
-#Usando KNNImputer
+#1.4 Usando KNNImputer
 imputer = KNNImputer(n_neighbors=5)
 df_preprocessed_1 = data.copy()
 df_preprocessed_1['Departure Delay in Minutes'] = imputer.fit_transform(df_preprocessed_1[['Departure Delay in Minutes']])
 df_preprocessed_1['Arrival Delay in Minutes'] = imputer.fit_transform(df_preprocessed_1[['Arrival Delay in Minutes']])
 
-#Eliminación de la columna no relevante
+#1.5 Eliminación de la columna no relevante
 #df_preprocessed_1.drop(columns='Departure Delay in Minutes', inplace=True)
 #df_preprocessed_1.drop(columns='id', inplace=True)
 
 print(df_preprocessed_1.info())
 df_preprocessed_2 = df_preprocessed_1.copy()
 
-# Comprobación de valores nulos
+#2. Comprobación de valores nulos
 print("Missing Values:")
 print(df_preprocessed_1.isnull().sum(), "\n")
 
-# Comprobación de forma del DataFrame
+#3. Comprobación de forma del DataFrame
 print(f"Original Shape: {data.shape}")
 print(f"Shape after handling missing values: {df_preprocessed_1.shape}\n")
 
-# Tipos de datos
+#4. Tipos de datos (para comprobar)
 print("Data Types:")
 print(df_preprocessed_1.dtypes, "\n")
 
+
+'''
 # TRANSFORMACIÓN DE DATOS
-# Codificación de variables categóricas
+'''
+#Codificación de variables categóricas
 category_columns = [col for col in df_preprocessed_1.columns if df_preprocessed_1[col].dtype == 'object' or df_preprocessed_1[col].dtype == 'category']
 
-## Inicializamos un diccionario para guardar los LabelEncoders de cada columna
+#Inicializamos un diccionario para guardar los LabelEncoders de cada columna
 labels_encoded = {}
 
-# Ajustamos el LabelEncoder con todas las categorías posibles en los datos de entrenamiento
-for col in category_columns:
+for col in category_columns: #Ajustamos el LabelEncoder con todas las categorías posibles en los datos de entrenamiento
    le = LabelEncoder()
    df_preprocessed_1[col] = le.fit_transform(df_preprocessed_1[col])
    df_preprocessed_2[col] = le.fit_transform(df_preprocessed_2[col])
    labels_encoded[col] = le
 
-##Eliminamos la columna satisfaction del diccionario, ya que las predicciones no se harán sobre esta columna
+#Eliminamos la columna satisfaction del diccionario, ya que las predicciones no se harán sobre esta columna
 labels_encoded.pop('satisfaction', None)
 
 print("Categorical Variables Encoded:")
@@ -164,7 +174,7 @@ print(df_preprocessed_1.head(), "\n")
 #Normalización de datos numéricos
 numeric_columns = [col for col in df_preprocessed_1.columns if df_preprocessed_1[col].dtype != 'object' and col != 'satisfaction']
 
-# Aplicar Min-Max Scaler
+#Aplicar Min-Max Scaler
 min_max_scaler = MinMaxScaler()
 df_preprocessed_2[numeric_columns] = min_max_scaler.fit_transform(df_preprocessed_1[numeric_columns])
 
@@ -173,12 +183,13 @@ standard_scaler = StandardScaler()
 df_preprocessed_1[numeric_columns] = standard_scaler.fit_transform(df_preprocessed_1[numeric_columns])
 
 print("Data Normalized:")
-# Comprobación de los datos normalizados
+
+#Comprobación de los datos normalizados
 #print(f"Mínimos y Máximos de las columnas normalizadas:\n{df_preprocessed_1[numeric_columns].min()}\n{df_preprocessed_1[numeric_columns].max()}\n")
 print(f"Standard deviation: \n{df_preprocessed_1.std()}\n")
 print(f"Information of the normalized dataset:\n{df_preprocessed_1.info()}\n")
 
-# Distribución de la variable objetivo
+#Distribución de la variable objetivo
 #print("Distribution of Target Variable:")
 #print(df_preprocessed_1['satisfaction'].value_counts(normalize=True), "\n")
 
@@ -187,7 +198,9 @@ LR_stesc = LR_model(df_preprocessed_1, 'Standard Scaler')
 LR_min = LR_model(df_preprocessed_2, 'Min-Max Scaler')
 plt.show()
 
+'''
 #SHOW ACCURACIES
+'''
 df_accuracies = pd.DataFrame(ACCURACIES)
 print(df_accuracies,"\nAlgunas Predicciones:")
 
