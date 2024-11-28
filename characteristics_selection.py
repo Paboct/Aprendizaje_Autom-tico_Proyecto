@@ -9,8 +9,7 @@ from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 import shap
 import matplotlib.pyplot as plt
-
-
+ 
 #Selector pertenece a {'KBest', 'RFE', 'PCA'} y Normalization a {'Minmax', 'Standard'}
 ACCURACIES = {'Selector':[], 'Accuracy':[], 'Normalization':[], 'Train accuracy':[], 'Test accuracy':[]}
 
@@ -71,12 +70,12 @@ df_minmax = pd.read_csv('train_students_preprocessed_minmax.csv')
 df_minmax = df_minmax.drop(columns='satisfaction')
 
 print('MinMax')
-model_cs(select_kbest(df_minmax, y, 10), y, "MinMaxScaler", "SelectKBest(10)")
-model_cs(select_kbest(df_minmax, y, 8), y, "MinMaxScaler", "SelectKBest(8)")
-model_cs(select_rfe(df_minmax, y, 10), y, "MinMaxScaler", "RFE(10)")
-model_cs(select_rfe(df_minmax, y, 8), y, "MinMaxScaler", "RFE(8)")
-model_cs(select_pca(df_minmax, 10), y, "MinMaxScaler", "PCA(10)")
-model_cs(select_pca(df_minmax, 16), y, "MinMaxScaler", "PCA(8)")
+model_cs(select_kbest(df_minmax, y, 20), y, "MinMaxScaler", "SelectKBest(20)")
+model_cs(select_kbest(df_minmax, y, 18), y, "MinMaxScaler", "SelectKBest(18)")
+model_cs(select_rfe(df_minmax, y, 20), y, "MinMaxScaler", "RFE(20)")
+model_cs(select_rfe(df_minmax, y, 18), y, "MinMaxScaler", "RFE(18)")
+model_cs(select_pca(df_minmax, 20), y, "MinMaxScaler", "PCA(20)")
+model_cs(select_pca(df_minmax, 16), y, "MinMaxScaler", "PCA(18)")
 
 #Standard
 df_standard = pd.read_csv('train_students_preprocessed_standard.csv')
@@ -84,17 +83,17 @@ df_standard = pd.read_csv('train_students_preprocessed_standard.csv')
 df_standard = df_standard.drop(columns='satisfaction')
 
 print('Standard')
-model_cs(select_kbest(df_standard, y, 10, f_classif), y, "StandardScaler", "SelectKBest(10)")
-model_cs(select_kbest(df_standard, y, 8, f_classif), y, "StandardScaler", "SelectKBest(8)")
-model_cs(select_rfe(df_standard, y, 10), y, "StandardScaler", "RFE(10)")
-model_cs(select_rfe(df_standard, y, 8), y, "StandardScaler", "RFE(8)")
-model_cs(select_pca(df_standard, 10), y, "StandardScaler", "PCA(10)")
-model_cs(select_pca(df_standard, 16), y, "StandardScaler", "PCA(8)")
+model_cs(select_kbest(df_standard, y, 20, f_classif), y, "StandardScaler", "SelectKBest(20)")
+model_cs(select_kbest(df_standard, y, 18, f_classif), y, "StandardScaler", "SelectKBest(18)")
+model_cs(select_rfe(df_standard, y, 20), y, "StandardScaler", "RFE(20)")
+model_cs(select_rfe(df_standard, y, 18), y, "StandardScaler", "RFE(18)")
+model_cs(select_pca(df_standard, 20), y, "StandardScaler", "PCA(20)")
+model_cs(select_pca(df_standard, 16), y, "StandardScaler", "PCA(18)")
 
 #Gráfica de SHAP
 #Probamos los selectores de características con los conjuntos de datos de minmax y standard
-df_min_max_best = select_kbest(df_minmax, y, 10)
-df_standard_best = select_kbest(df_standard, y, 10, f_classif)
+df_min_max_best = select_kbest(df_minmax, y, 20)
+df_standard_best = select_kbest(df_standard, y, 20, f_classif)
 
 #Hacemos el modelo
 model_min_max = LogisticRegression().fit(df_min_max_best, y)
@@ -110,7 +109,7 @@ shap_values_standard = explainer_standard(df_standard_best)
 
 #Graficamos
 plt.figure(figsize=(14, 16))
-plt.suptitle("SHAP values for the best features selected by KBEST", fontsize=10)
+plt.suptitle("SHAP values for the best features selected by KBEST", fontsize=20)
 
 plt.subplot(2, 1, 1)
 #shap.plots.beeswarm(shap_values_minmax, max_display=16, show=False)
