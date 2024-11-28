@@ -10,6 +10,11 @@ from sklearn.impute import KNNImputer
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
+ACCURACIES = {'Model': [], 'Accuracy': [], 'Train Score': [], 'Test Score': []}
+
+# Carga el conjunto de datos
+data = pd.read_csv('train_students.csv')
+
 def transform_data_min_max(df: pd.DataFrame, labels_encoded: dict, scaler:MinMaxScaler) -> pd.DataFrame:
     """
     Transforma las columnas categóricas y numéricas de un DataFrame con un LabelEncoder y MinMaxScaler.
@@ -69,11 +74,6 @@ def LR_model(df:pd.DataFrame, model:str) -> LogisticRegression:
 
     return LR
 
-ACCURACIES = {'Model': [], 'Accuracy': [], 'Train Score': [], 'Test Score': []}
-
-# Carga el conjunto de datos
-data = pd.read_csv('train_students.csv')
-
 #Creación de nuevas características
 #Total Delay
 #data['Total Delay'] = data['Departure Delay in Minutes'] + data['Arrival Delay in Minutes']
@@ -104,9 +104,9 @@ data.drop(columns=['Seat comfort', 'Inflight entertainment', 'Inflight service',
 #LIMPIEZA DE DATOS
 # Manejo de valores nulos
 #Rellenando con la media
-#mean_delay = data['Arrival Delay in Minutes'].mean()
-#df_preprocessed_1 = data.copy()
-#df_preprocessed_1['Arrival Delay in Minutes'].fillna(mean_delay, inplace=True)
+mean_delay = data['Arrival Delay in Minutes'].mean()
+df_preprocessed_1 = data.copy()
+df_preprocessed_1['Arrival Delay in Minutes'].fillna(mean_delay, inplace=True)
 
 
 #Para Total Delay
