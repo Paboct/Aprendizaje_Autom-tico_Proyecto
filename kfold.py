@@ -1,4 +1,3 @@
-"Habría que probar también con make_moons"
 from sklearn import model_selection
 from sklearn.model_selection import cross_val_score
 from sklearn.svm import SVC
@@ -76,6 +75,10 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
     neuron_fold_precision = []
     neuron_fold_recall = []
     neuron_fold_error = []
+
+    #Si queremos que la red neuronal use make_moons
+    #data = make_moons(n_samples=data.shape[0], noise=0.3, random_state=42)
+    #k_fold_list = kfold(data, n_folds)
 
     for train, test in k_fold_list:
 
