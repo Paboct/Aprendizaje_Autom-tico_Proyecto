@@ -29,7 +29,6 @@ print("Standard dataframe information")
 print(df_standard.info())
 
 X = df_min_max.values[:, :-1]
-X = df_min_max.values[:, :-1]
 y = data_original['satisfaction']
 
 #Split train-test data
