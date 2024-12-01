@@ -233,7 +233,6 @@ df_preprocessed_2.to_csv('train_students_preprocessed_minmax.csv', index=False)
 #   'Departure Delay in Minutes': [10],
 #   'Arrival Delay in Minutes': [5],
 #})
-#
 #example = transform_data_min_max(example, labels_encoded, min_max_scaler)
 #example = transform_data_standard(example, labels_encoded, standard_scaler)
 #prediction_sts = LR_stesc.predict(example)
