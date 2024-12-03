@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from sklearn.neural_network import MLPClassifier
 from sklearn.impute import KNNImputer
 import joblib
-import pickle
+
 
 class APS_Solver:
     def __init__(self):
@@ -20,8 +20,7 @@ class APS_Solver:
     
     def save_model(self, model_path):
         """Save the trained model to a file."""
-        with open(model_path, 'wb') as file:
-            pickle.dump(self.model,file)
+        joblib.dump((self.model, self.labels_encoded, self.scaler), model_path)
     
     def preprocess_data(self, df, is_training=True):
         """Clean and preprocess the dataset."""
