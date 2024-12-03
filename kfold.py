@@ -61,11 +61,11 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
             knn_fold_error.append(1 - accuracy_score(y_test, y_pred))
 
         #Guardamos las medias de cada métrica de KNN para cada k
-        knn_accuracy.append(np.mean(knn_fold_accuracy) * 100)
-        knn_f1.append(np.mean(knn_fold_f1) * 100)
-        knn_precision.append(np.mean(knn_fold_precision) * 100)
-        knn_recall.append(np.mean(knn_fold_recall) * 100)
-        knn_error.append(np.mean(knn_fold_error) * 100)
+        knn_accuracy.append(np.mean(knn_fold_accuracy))
+        knn_f1.append(np.mean(knn_fold_f1))
+        knn_precision.append(np.mean(knn_fold_precision))
+        knn_recall.append(np.mean(knn_fold_recall))
+        knn_error.append(np.mean(knn_fold_error))
 
 
 
