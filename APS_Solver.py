@@ -78,7 +78,7 @@ class APS_Solver:
         self.model = MLPClassifier(hidden_layer_sizes=(25, 25, 24), activation='tanh', max_iter=1000,
                                    tol=1e-5, solver='adam', learning_rate_init=0.001, random_state=42)
         self.model.fit(X, y)
-
+ 
     def test_model(self, file_path):
         """Test the model using the data from the provided file path."""
         df = pd.read_csv(file_path)
