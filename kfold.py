@@ -91,7 +91,7 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
         y_train = train["satisfaction"]
         y_test = test["satisfaction"]
 
-        clf = MLPClassifier(hidden_layer_sizes=(30, 30, 30), activation='tanh', max_iter=1000,
+        clf = MLPClassifier(hidden_layer_sizes=(25, 25, 25), activation='tanh', max_iter=1000,
                             tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=False, random_state=42)
         clf.fit(x_train, y_train)
         y_test_assig = clf.predict(x_test)

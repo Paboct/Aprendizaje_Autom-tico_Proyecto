@@ -173,3 +173,12 @@ Training loss did not improve more than tol=0.000010 for 10 consecutive epochs. 
     Neuronal Network error:  [10.98658120058315]
     Neuronal Network train:  0.9062306461385601
     Neuronal Network test:  0.8901341879941684
+
+- Con 3 capas de 25:
+    Neuronal Network accuracy:  [np.float64(89.22322242489615)]
+    Neuronal Network f1:  [np.float64(89.19248909661142)]
+    Neuronal Network precision:  [np.float64(89.23072696375229)]
+    Neuronal Network recall:  [np.float64(89.22322242489615)]
+    Neuronal Network error:  [np.float64(10.776777575103843)]
+    Neuronal Network train:  0.9011393545808686
+    Neuronal Network test:  0.8922322242489615
