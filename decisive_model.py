@@ -1,15 +1,13 @@
 import numpy as np
 import pandas as pd
 from sklearn.metrics import f1_score, precision_score ,recall_score, accuracy_score
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from sklearn.neural_network import MLPClassifier
 from characteristics_selection import select_kbest
 from sklearn.impute import KNNImputer
-from sklearn.preprocessing import MinMaxScaler
 
-def create_model(data:pd.DataFrame, n_folds:int=5) -> list:
-    """Devolverá el dataframe que contine la accurcy, f1-score, precision y recall de 
-    una red neuronal"""
+def create_model(data:pd.DataFrame, n_folds:int=5) -> None:
+    """Esta función crea un modelo neuronal y lo entrena"""
     #Dataframe del modelo
     df_neuron = {}
 
@@ -54,32 +52,20 @@ def create_model(data:pd.DataFrame, n_folds:int=5) -> list:
         neuron_test.append(clf.score(x_test, y_test))
 
     #Guardamos las medias de cada métrica de la red neuronal
-    neuron_accuracy.append(np.mean(neuron_fold_accuracy))
-    neuron_f1.append(np.mean(neuron_fold_f1))
-    neuron_precision.append(np.mean(neuron_fold_precision))
-    neuron_recall.append(np.mean(neuron_fold_recall))
-    neuron_error.append(np.mean(neuron_fold_error))
+    neuron_accuracy = np.mean(neuron_fold_accuracy)
+    neuron_f1 = np.mean(neuron_fold_f1)
+    neuron_precision = np.mean(neuron_fold_precision)
+    neuron_recall = np.mean(neuron_fold_recall)
+    neuron_error = np.mean(neuron_fold_error)
     neuron_train = np.mean(neuron_train)
     neuron_test = np.mean(neuron_test)
-    print("Neuronal Network accuracy: ", neuron_accuracy[0])
-    print("Neuronal Network f1: ", neuron_f1[0])
-    print("Neuronal Network precision: ", neuron_precision[0])
-    print("Neuronal Network recall: ", neuron_recall[0])
-    print("Neuronal Network error: ", neuron_error[0])
-    print("Neuronal Network train: ", neuron_train[0])
-    print("Neuronal Network test: ", neuron_test[0])
-
-    """Neuronal Network"""
-    df_neuron["Accuracy"] = neuron_accuracy
-    df_neuron["F1-score"] = neuron_f1
-    df_neuron["Precision"] = neuron_precision
-    df_neuron["Recall"] = neuron_recall
-    df_neuron["Error"] = neuron_error
-
-    df_neuron = pd.DataFrame(df_neuron, columns=[col for col in df_neuron.keys()])
-
-    return df_neuron
-
+    print("Neuronal Network accuracy: ", neuron_accuracy)
+    print("Neuronal Network f1: ", neuron_f1)
+    print("Neuronal Network precision: ", neuron_precision)
+    print("Neuronal Network recall: ", neuron_recall)
+    print("Neuronal Network error: ", neuron_error)
+    print("Neuronal Network train: ", neuron_train)
+    print("Neuronal Network test: ", neuron_test)
 
 def generate_index_folds(num_rows:int, folds:int) -> np.ndarray:
     """Nos devuelve un array con los indices de los folds
@@ -152,14 +138,9 @@ for col in data.columns:
 #Codificación variables categóricas
 category_columns = [col for col in data.columns if data[col].dtype == 'object' or data[col].dtype == 'category']
 
-labels_encoded = {}
-
 for col in category_columns: #Ajustamos el LabelEncoder con todas las categorías posibles en los datos de entrenamiento
    le = LabelEncoder()
    data[col] = le.fit_transform(data[col])
-   labels_encoded[col] = le
-
-labels_encoded.pop('satisfaction', None)
 
 #Normalización variables numéricas
 numeric_columns = [col for col in data.columns if data[col].dtype != 'object' and col != 'satisfaction']
@@ -178,7 +159,4 @@ X_selected = select_kbest(X, y, 10)
 data = pd.concat([X, y], axis=1) #axis=1 para concatenar por columnas
 
 "Making the neuronal network model"
-neuronal_network = create_model(data, 5)
-
-#Guardamos el dataframe en un archivo csv
-neuronal_network.to_csv('neuronal_network_metrics.csv', index=False)
+create_model(data, 5)

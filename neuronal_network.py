@@ -11,7 +11,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import recall_score
 # Importar el f1-score
 from sklearn.metrics import f1_score
-from sklearn.metrics import precision_score
+from sklearn.metrics import precision_score 
 from sklearn.metrics import accuracy_score
 
 'Dataset Loading'
