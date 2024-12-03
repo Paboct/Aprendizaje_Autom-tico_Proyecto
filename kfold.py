@@ -91,8 +91,8 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
         y_train = train["satisfaction"]
         y_test = test["satisfaction"]
 
-        clf = MLPClassifier(hidden_layer_sizes=(25, 25, 25), activation='tanh', max_iter=1000,
-                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=False, random_state=42)
+        clf = MLPClassifier(hidden_layer_sizes=(25, 25, 24), activation='tanh', max_iter=1000,
+                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=True, random_state=42)
         clf.fit(x_train, y_train)
         y_test_assig = clf.predict(x_test)
 
@@ -217,7 +217,7 @@ def kfold(df:pd.DataFrame, folds:int) -> list:
 #Cargamos la columna de satisfacción
 original_dataset = pd.read_csv('train_students.csv')
 y = original_dataset.values[:,-1]
-print(y)
+#print(y)
 #Cargamos los dataframes preprocesados
 df_min_max = pd.read_csv('train_students_preprocessed_minmax.csv')
 df_min_max = df_min_max.drop(columns='satisfaction')
@@ -228,9 +228,9 @@ df_min_max = df_min_max.drop(columns='satisfaction')
 
 "Selecting the best characteristics"
 #kbest
-print(df_min_max.columns)
+#print(df_min_max.columns)
 data = select_kbest(df_min_max, y, 10)
-print(data.columns)
+#print(data.columns)
 #Concateno la columna de satisfacción, para poder entrenar el modelo
 data = pd.concat([data, original_dataset['satisfaction']], axis=1) #axis=1 para concatenar por columnas
 

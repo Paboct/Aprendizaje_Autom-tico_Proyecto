@@ -126,9 +126,12 @@ df_preprocessed_1['Arrival Delay in Minutes'].fillna(mean_delay, inplace=True)
 
 #1.4 Usando KNNImputer
 imputer = KNNImputer(n_neighbors=5)
-df_preprocessed_1 = data.copy()
-df_preprocessed_1['Departure Delay in Minutes'] = imputer.fit_transform(df_preprocessed_1[['Departure Delay in Minutes']])
-df_preprocessed_1['Arrival Delay in Minutes'] = imputer.fit_transform(df_preprocessed_1[['Arrival Delay in Minutes']])
+#buscar que caracteristicas son nulas
+print(df_preprocessed_1.isnull().sum())
+#rellenar las caracteristicas nulas
+for col in df_preprocessed_1.columns:
+    if df_preprocessed_1[col].isnull().sum() > 0:
+        df_preprocessed_1[col] = imputer.fit_transform(df_preprocessed_1[[col]])
 
 #1.5 Eliminación de la columna no relevante
 #df_preprocessed_1.drop(columns='Departure Delay in Minutes', inplace=True)
@@ -148,7 +151,6 @@ print(f"Shape after handling missing values: {df_preprocessed_1.shape}\n")
 #4. Tipos de datos (para comprobar)
 print("Data Types:")
 print(df_preprocessed_1.dtypes, "\n")
-
 
 '''
 # TRANSFORMACIÓN DE DATOS
