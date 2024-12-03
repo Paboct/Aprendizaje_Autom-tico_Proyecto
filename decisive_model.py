@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, f1_score, precision_score ,recall_score, accuracy_score
+from sklearn.metrics import f1_score, precision_score ,recall_score, accuracy_score
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neural_network import MLPClassifier
 from characteristics_selection import select_kbest
