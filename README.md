@@ -129,7 +129,7 @@ Training loss did not improve more than tol=0.000010 for 10 consecutive epochs. 
     Neuronal Network train:  0.8969116798152781
     Neuronal Network test:  0.8921386977236633
 
-- Con 2 capas 20, 20
+- Con 2 capas 20, 20:
     Neuronal Network accuracy:  [89.10869649990032]
     Neuronal Network f1:  [89.06915790921431]
     Neuronal Network precision:  [89.1258106982782]
@@ -137,3 +137,39 @@ Training loss did not improve more than tol=0.000010 for 10 consecutive epochs. 
     Neuronal Network error:  [10.891303500099689]
     Neuronal Network train:  0.8941042174107061
     Neuronal Network test:  0.8910869649990032
+
+- Con 3 capas de 15:
+    Neuronal Network accuracy:  [np.float64(88.9840704557486)]
+    Neuronal Network f1:  [np.float64(88.94496550921535)]
+    Neuronal Network precision:  [np.float64(88.99804956058291)]
+    Neuronal Network recall:  [np.float64(88.9840704557486)]
+    Neuronal Network error:  [np.float64(11.015929544251414)]
+    Neuronal Network train:  0.8949393881085241
+    Neuronal Network test:  0.8898407045574859
+
+- Con 4 capas de 20
+    Neuronal Network accuracy:  [89.12914429294759]
+    Neuronal Network f1:  [89.09833278602679]
+    Neuronal Network precision:  [89.13749573461098]
+    Neuronal Network recall:  [89.12914429294759]
+    Neuronal Network error:  [10.870855707052414]
+    Neuronal Network train:  0.8978573280554979
+    Neuronal Network test:  0.8912914429294758
+
+- Con 3 capas de 30:
+    Neuronal Network accuracy:  [np.float64(89.1079936474325)]
+    Neuronal Network f1:  [np.float64(89.081414404818)]
+    Neuronal Network precision:  [np.float64(89.10420317685673)]
+    Neuronal Network recall:  [np.float64(89.1079936474325)]
+    Neuronal Network error:  [np.float64(10.892006352567495)]
+    Neuronal Network train:  0.9050894746969405
+    Neuronal Network test:  0.8910799364743249
+
+- Con 3 capas de 40:
+    Neuronal Network accuracy:  [89.01341879941684]
+    Neuronal Network f1:  [88.98139205284865]
+    Neuronal Network precision:  [89.01847528367902]
+    Neuronal Network recall:  [89.01341879941684]
+    Neuronal Network error:  [10.98658120058315]
+    Neuronal Network train:  0.9062306461385601
+    Neuronal Network test:  0.8901341879941684
