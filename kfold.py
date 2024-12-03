@@ -27,6 +27,7 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
     knn_precision, neuron_precision, dt_precision = [],  [], []
     knn_recall, neuron_recall, dt_recall = [], [], []
     knn_error, neuron_error, dt_error = [], [], []
+    neuron_train, neuron_test = [], []
 
     #Creamos los folds para realizar los entrenamientos
     k_fold_list = kfold(data, n_folds)
@@ -75,6 +76,8 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
     neuron_fold_precision = []
     neuron_fold_recall = []
     neuron_fold_error = []
+    train_fold = []
+    test_fold = []
 
     #Si queremos que la red neuronal use make_moons
     #data = make_moons(n_samples=data.shape[0], noise=0.3, random_state=42)
@@ -83,7 +86,7 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
 
     for train, test in k_fold_list:
 
-        clf = MLPClassifier(hidden_layer_sizes=(10, 10, 10), activation='tanh', max_iter=1000,
+        clf = MLPClassifier(hidden_layer_sizes=(9, 9, 9), activation='tanh', max_iter=1000,
                             tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=True, random_state=42)
         clf.fit(x_train, y_train)
         y_test_assig = clf.predict(x_test)
@@ -94,6 +97,8 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
         neuron_fold_precision.append(precision_score(y_test, y_test_assig, average='weighted'))
         neuron_fold_recall.append(recall_score(y_test, y_test_assig, average='weighted'))
         neuron_fold_error.append(1 - accuracy_score(y_test, y_test_assig))
+        neuron_train.append(clf.score(x_train, y_train))
+        neuron_test.append(clf.score(x_test, y_test))
 
     #Guardamos las medias de cada métrica de la red neuronal
     neuron_accuracy.append(np.mean(neuron_fold_accuracy) * 100)
@@ -101,11 +106,15 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
     neuron_precision.append(np.mean(neuron_fold_precision) * 100)
     neuron_recall.append(np.mean(neuron_fold_recall) * 100)
     neuron_error.append(np.mean(neuron_fold_error) * 100)
+    neuron_train = np.mean(neuron_train)
+    neuron_test = np.mean(neuron_test)
     print("Neuronal Network accuracy: ", neuron_accuracy)
     print("Neuronal Network f1: ", neuron_f1)
     print("Neuronal Network precision: ", neuron_precision)
     print("Neuronal Network recall: ", neuron_recall)
     print("Neuronal Network error: ", neuron_error)
+    print("Neuronal Network train: ", neuron_train)
+    print("Neuronal Network test: ", neuron_test)
 
 
     """Decision Tree"""
@@ -214,7 +223,9 @@ df_min_max = df_min_max.drop(columns='satisfaction')
 
 "Selecting the best characteristics"
 #kbest
-data = select_kbest(df_min_max, y, 12)
+print(df_min_max.columns)
+data = select_kbest(df_min_max, y, 10)
+print(data.columns)
 #Concateno la columna de satisfacción, para poder entrenar el modelo
 data = pd.concat([data, original_dataset['satisfaction']], axis=1) #axis=1 para concatenar por columnas
 
