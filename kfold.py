@@ -33,39 +33,39 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
     k_fold_list = kfold(data, n_folds)
 
     """KNN"""
-    for k in k_list:
+    #for k in k_list:
         #Listas de las métricas de cada fold
-        knn_fold_accuracy = []
-        knn_fold_f1 = []
-        knn_fold_precision = []
-        knn_fold_recall = []
-        knn_fold_error = []
-
-        for train, test in k_fold_list:
-            # Hacemos la división de los datos
-            x_train = train.drop(columns=["satisfaction"])
-            y_train = train["satisfaction"]
-            x_test = test.drop(columns=["satisfaction"])
-            y_test = test["satisfaction"]
-
-            """KNN"""
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(x_train, y_train)
-            y_pred = knn.predict(x_test)
-            
-            #Guardamos las métricas para esté fold
-            knn_fold_accuracy.append(accuracy_score(y_test, y_pred))
-            knn_fold_f1.append(f1_score(y_test, y_pred, average='weighted'))
-            knn_fold_precision.append(precision_score(y_test, y_pred, average='weighted'))
-            knn_fold_recall.append(recall_score(y_test, y_pred, average='weighted'))
-            knn_fold_error.append(1 - accuracy_score(y_test, y_pred))
-
-        #Guardamos las medias de cada métrica de KNN para cada k
-        knn_accuracy.append(np.mean(knn_fold_accuracy))
-        knn_f1.append(np.mean(knn_fold_f1))
-        knn_precision.append(np.mean(knn_fold_precision))
-        knn_recall.append(np.mean(knn_fold_recall))
-        knn_error.append(np.mean(knn_fold_error))
+        #knn_fold_accuracy = []
+        #knn_fold_f1 = []
+        #knn_fold_precision = []
+        #knn_fold_recall = []
+        #knn_fold_error = []
+#
+        #for train, test in k_fold_list:
+        #    # Hacemos la división de los datos
+        #    x_train = train.drop(columns=["satisfaction"])
+        #    y_train = train["satisfaction"]
+        #    x_test = test.drop(columns=["satisfaction"])
+        #    y_test = test["satisfaction"]
+#
+        #    """KNN"""
+        #    knn = KNeighborsClassifier(n_neighbors=k)
+        #    knn.fit(x_train, y_train)
+        #    y_pred = knn.predict(x_test)
+        #    
+        #    #Guardamos las métricas para esté fold
+        #    knn_fold_accuracy.append(accuracy_score(y_test, y_pred))
+        #    knn_fold_f1.append(f1_score(y_test, y_pred, average='weighted'))
+        #    knn_fold_precision.append(precision_score(y_test, y_pred, average='weighted'))
+        #    knn_fold_recall.append(recall_score(y_test, y_pred, average='weighted'))
+        #    knn_fold_error.append(1 - accuracy_score(y_test, y_pred))
+#
+        ##Guardamos las medias de cada métrica de KNN para cada k
+        #knn_accuracy.append(np.mean(knn_fold_accuracy))
+        #knn_f1.append(np.mean(knn_fold_f1))
+        #knn_precision.append(np.mean(knn_fold_precision))
+        #knn_recall.append(np.mean(knn_fold_recall))
+        #knn_error.append(np.mean(knn_fold_error))
 
 
 
@@ -85,9 +85,14 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
     #k_fold_list = kfold(data, n_folds)
 
     for train, test in k_fold_list:
+        
+        x_train = train.drop(columns=["satisfaction"])
+        x_test = test.drop(columns=["satisfaction"])
+        y_train = train["satisfaction"]
+        y_test = test["satisfaction"]
 
-        clf = MLPClassifier(hidden_layer_sizes=(9, 9, 9), activation='tanh', max_iter=1000,
-                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=True, random_state=42)
+        clf = MLPClassifier(hidden_layer_sizes=(20, 20), activation='tanh', max_iter=1000,
+                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=False, random_state=42)
         clf.fit(x_train, y_train)
         y_test_assig = clf.predict(x_test)
 
@@ -146,11 +151,11 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
 
     #Actualizamos los diccionarios
     """KNN"""
-    df_knn["Accuracy"] = knn_accuracy
-    df_knn["F1-score"] = knn_f1
-    df_knn["Precision"] = knn_precision
-    df_knn["Recall"] = knn_recall
-    df_knn["Error"] = knn_error
+    #df_knn["Accuracy"] = knn_accuracy
+    #df_knn["F1-score"] = knn_f1
+    #df_knn["Precision"] = knn_precision
+    #df_knn["Recall"] = knn_recall
+    #df_knn["Error"] = knn_error
 
     """Neuronal Network"""
     df_neuron["Accuracy"] = neuron_accuracy
@@ -161,19 +166,19 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> list:
 
 
     """Decision Tree"""
-    df_dt["Accuracy"] = dt_accuracy
-    df_dt["F1-score"] = dt_f1
-    df_dt["Precision"] = dt_precision
-    df_dt["Recall"] = dt_recall
-    df_dt["Error"] = dt_error
+    #df_dt["Accuracy"] = dt_accuracy
+    #df_dt["F1-score"] = dt_f1
+    #df_dt["Precision"] = dt_precision
+    #df_dt["Recall"] = dt_recall
+    #df_dt["Error"] = dt_error
 
 
     #Creamos los dataframes
-    df_knn = pd.DataFrame(df_knn, columns=[col for col in df_knn.keys()])
+    #df_knn = pd.DataFrame(df_knn, columns=[col for col in df_knn.keys()])
     df_neuron = pd.DataFrame(df_neuron, columns=[col for col in df_neuron.keys()])
-    df_dt = pd.DataFrame(df_dt, columns=[col for col in df_dt.keys()])
+    #df_dt = pd.DataFrame(df_dt, columns=[col for col in df_dt.keys()])
 
-    return (df_knn, df_neuron, df_dt)
+    return df_knn
 
 
 def generate_index_folds(num_rows:int, folds:int) -> np.ndarray:
@@ -239,9 +244,10 @@ data = pd.concat([data, original_dataset['satisfaction']], axis=1) #axis=1 para 
 
 "Creating the models dataframe"
 k_list = [1, 3, 5, 7, 9, 11]
-knn, neuronal_network, dt = create_models_df(k_list, data, 5)
+#knn, neuronal_network, dt = create_models_df(k_list, data, 5)
+neuronal_network = create_models_df(k_list, data, 5)
 
 #Guardamos el dataframe en un archivo csv
-knn.to_csv('knn_metrics.csv', index=False)
+#knn.to_csv('knn_metrics.csv', index=False)
 neuronal_network.to_csv('neuronal_network_metrics.csv', index=False)
-dt.to_csv('dt_metrics.csv', index=False)
+#dt.to_csv('dt_metrics.csv', index=False)
