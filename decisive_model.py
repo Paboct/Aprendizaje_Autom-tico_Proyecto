@@ -35,7 +35,7 @@ def create_model(data:pd.DataFrame, n_folds:int) -> None:
         y_test = test["satisfaction"]
 
         clf = MLPClassifier(hidden_layer_sizes=(25, 25, 24), activation='tanh', max_iter=1000,
-                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=True, random_state=42)
+                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=False, random_state=42)
         clf.fit(x_train, y_train)
         y_test_assig = clf.predict(x_test)
 
@@ -161,5 +161,5 @@ X_selected = select_kbest(X, y, 9)
 #Concateno la columna de satisfacción, para poder entrenar el modelo
 data = pd.concat([X, y], axis=1) #axis=1 para concatenar por columnas
 
-"Making the neuronal network model"    
-create_model(data, 10)
+"Making the neuronal network model"
+create_model(data, 2)
