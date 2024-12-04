@@ -14,6 +14,12 @@ APS_Solver -> 'Acabado'
 
 characteristics_selection.py -> Acabado
 
+kfold -> Acabado
+
+dt_metrics.csv -> Acabado
+
+knn_metrics.csv -> Acabado
+
 Prueba red neuronal
 
 - 3 capas con 11 nodos
