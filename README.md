@@ -4,13 +4,15 @@
 
  data_preprocessing -> Hecho
 
- train_students_prep_minmax -> Hecho
+train_students_prep_minmax -> Hecho
  
- train_students_prep_standard -> Hecho
+train_students_prep_standard -> Hecho
 
 decisive_model -> 'Acabado'
 
- APS_Solver -> 'Acabado'
+APS_Solver -> 'Acabado'
+
+characteristics_selection.py -> Acabado
 
 Prueba red neuronal
 
