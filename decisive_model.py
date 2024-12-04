@@ -38,7 +38,7 @@ def create_model(data:pd.DataFrame, n_folds:int=5) -> None:
         y_test = test["satisfaction"]
 
         clf = MLPClassifier(hidden_layer_sizes=(25, 25, 24), activation='tanh', max_iter=1000,
-                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=True, random_state=42)
+                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=False, random_state=42)
         clf.fit(x_train, y_train)
         y_test_assig = clf.predict(x_test)
 
@@ -100,13 +100,6 @@ def kfold(df:pd.DataFrame, folds:int) -> list:
     return create_folds(df_rand, folds)
 
 "Data loading"
-##Cargamos la columna de satisfacción
-#original_dataset = pd.read_csv('train_students.csv')
-#y = original_dataset.values[:,-1]
-##print(y)
-##Cargamos los dataframes preprocesados
-#df_min_max = pd.read_csv('train_students_preprocessed_minmax.csv')
-#df_min_max = df_min_max.drop(columns='satisfaction')
 data = pd.read_csv('train_students.csv')
 
 '''Creación de nuevas características'''
@@ -162,5 +155,5 @@ X_selected = select_kbest(X, y, 9)
 #Concateno la columna de satisfacción, para poder entrenar el modelo
 data = pd.concat([X, y], axis=1) #axis=1 para concatenar por columnas
 
-"Making the neuronal network model"
+"Making the neuronal network model"    
 create_model(data, 5)
