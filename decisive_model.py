@@ -3,14 +3,11 @@ import pandas as pd
 from sklearn.metrics import f1_score, precision_score ,recall_score, accuracy_score
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from sklearn.neural_network import MLPClassifier
-from characteristics_selection import select_kbest
+from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.impute import KNNImputer
 
-def create_model(data:pd.DataFrame, n_folds:int=5) -> None:
+def create_model(data:pd.DataFrame, n_folds:int) -> None:
     """Esta función crea un modelo neuronal y lo entrena"""
-    #Dataframe del modelo
-    df_neuron = {}
-
     #Listas de los accuracies de cada modelo
     neuron_accuracy = []
     neuron_f1 = []
@@ -38,7 +35,7 @@ def create_model(data:pd.DataFrame, n_folds:int=5) -> None:
         y_test = test["satisfaction"]
 
         clf = MLPClassifier(hidden_layer_sizes=(25, 25, 24), activation='tanh', max_iter=1000,
-                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=False, random_state=42)
+                            tol=1e-5, solver='adam', learning_rate_init=0.001, verbose=True, random_state=42)
         clf.fit(x_train, y_train)
         y_test_assig = clf.predict(x_test)
 
@@ -66,6 +63,15 @@ def create_model(data:pd.DataFrame, n_folds:int=5) -> None:
     print("Neuronal Network error: ", neuron_error)
     print("Neuronal Network train: ", neuron_train)
     print("Neuronal Network test: ", neuron_test)
+
+def select_kbest(X:pd.DataFrame, y:np.array, ks:int) -> pd.DataFrame:
+    """Realiza la selección de las k mejores características, para un 
+    dataframe de caracterísitcas y un array de etiqutas."""
+    selector = SelectKBest(score_func=chi2, k=ks)
+    x_best = selector.fit_transform(X, y)
+    best_columns = X.columns[selector.get_support()]
+
+    return pd.DataFrame(x_best, columns=best_columns)
 
 def generate_index_folds(num_rows:int, folds:int) -> np.ndarray:
     """Nos devuelve un array con los indices de los folds
@@ -156,4 +162,4 @@ X_selected = select_kbest(X, y, 9)
 data = pd.concat([X, y], axis=1) #axis=1 para concatenar por columnas
 
 "Making the neuronal network model"    
-create_model(data, 5)
+create_model(data, 10)
