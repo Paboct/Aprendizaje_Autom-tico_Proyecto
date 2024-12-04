@@ -20,6 +20,12 @@ dt_metrics.csv -> Acabado
 
 knn_metrics.csv -> Acabado
 
+Logistic_Regresion -> Acabado
+
+LR_minmax_scaler.csv -> Acabado
+
+LR_standard_scaler.csv -> Acabado
+------------------------------------
 Prueba red neuronal
 
 - 3 capas con 11 nodos

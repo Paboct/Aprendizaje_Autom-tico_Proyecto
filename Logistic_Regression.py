@@ -1,9 +1,17 @@
 from sklearn.linear_model import LogisticRegression
-ACCURACIES = {'Model': [], 'Accuracy': [], 'Train Score': [], 'Test Score': []}
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+import pandas as pd
+import matplotlib.pyplot as plt
 
-def LR_model(df:pd.DataFrame, model:str) -> LogisticRegression:
+
+def LR_model(df:pd.DataFrame, model:str) -> pd.DataFrame:
     """Realiza el modelo de Regresión Logística y
-    nos devuelve el modelo"""
+    nos devuelve el dataframe con las métricas"""
+
+    #Diccionario con las métricas
+    ACCURACIES = {'Model': [], 'Accuracy': [], 'Train Score': [], 'Test Score': []}
+    
     X = df.drop(columns=['satisfaction'])
     y = df['satisfaction']
 
@@ -33,7 +41,20 @@ def LR_model(df:pd.DataFrame, model:str) -> LogisticRegression:
     ACCURACIES['Train Score'].append(train_score)
     ACCURACIES['Test Score'].append(test_score)
 
-    return LR
+    return pd.DataFrame(ACCURACIES, columns=[i for i in ACCURACIES.keys()])
 
-LR_stesc = LR_model(df_preprocessed_1, 'Standard Scaler')
-LR_min = LR_model(df_preprocessed_2, 'Min-Max Scaler')
+"Cargamos los datasets preprocesados"
+df_standard = pd.read_csv('train_students_preprocessed_standard.csv')
+df_minmax = pd.read_csv('train_students_preprocessed_minmax.csv')
+
+# Eliminamos la columna de etiquetas en ambos datasets
+X_min_max = df_minmax.drop(columns=['satisfaction'])
+y_min_max = df_minmax['satisfaction']
+
+#Realizamos el modelo de Regresión Logística
+df_LR_stesc = LR_model(df_standard, 'Standard Scaler')
+df_LR_minesc = LR_model(df_minmax, 'Min-Max Scaler')
+
+#Creamos el csv con las métricas
+df_LR_stesc.to_csv('LR_standard_scaler.csv', index=False)
+df_LR_minesc.to_csv('LR_minmax_scaler.csv', index=False)
