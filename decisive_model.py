@@ -110,6 +110,10 @@ def kfold(df:pd.DataFrame, folds:int) -> list:
 data = pd.read_csv('train_students.csv')
 
 '''Creación de nuevas características'''
+#1. Total Delay
+data['Total Delay'] = data['Departure Delay in Minutes'] + data['Arrival Delay in Minutes']
+data.drop(columns=['Departure Delay in Minutes', 'Arrival Delay in Minutes'], inplace=True)
+
 #2. Age en ranges
 ranges = [0, 18, 35, 60, 100]
 labels = ['Joven', 'Adulto Joven', 'Adulto', 'Adulto Mayor']
@@ -153,7 +157,7 @@ X = data.drop(columns='satisfaction')
 y = data['satisfaction']
 
 "Selecting the best characteristics"
-X_selected = select_kbest(X, y, 10)
+X_selected = select_kbest(X, y, 9)
 
 #Concateno la columna de satisfacción, para poder entrenar el modelo
 data = pd.concat([X, y], axis=1) #axis=1 para concatenar por columnas
