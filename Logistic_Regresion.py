@@ -1,5 +1,5 @@
 from sklearn.linear_model import LogisticRegression
-
+#hola
 ACCURACIES = {'Model': [], 'Accuracy': [], 'Train Score': [], 'Test Score': []}
 
 def LR_model(df:pd.DataFrame, model:str) -> LogisticRegression:
