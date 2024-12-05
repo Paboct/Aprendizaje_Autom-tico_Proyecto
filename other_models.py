@@ -10,8 +10,12 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.neural_network import MLPClassifier
 from characteristics_selection import select_kbest, select_rfe, select_pca
 from sklearn.datasets import make_moons
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+
 
 def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> tuple:
     """Devolverá una lista de los dataframe que contine la accurcy, f1-score, precision y recall de
@@ -107,12 +111,49 @@ def create_models_df(k_list:list, data:pd.DataFrame, n_folds:int=5) -> tuple:
     df_dt["Recall"] = dt_recall
     df_dt["Error"] = dt_error
 
-
     #Creamos los dataframes
     df_knn = pd.DataFrame(df_knn, columns=[col for col in df_knn.keys()])
     df_dt = pd.DataFrame(df_dt, columns=[col for col in df_dt.keys()])
 
     return (df_knn, df_dt)
+
+def LR_model(df:pd.DataFrame, model:str) -> pd.DataFrame:
+    """Realiza el modelo de Regresión Logística y
+    nos devuelve el dataframe con las métricas"""
+
+    #Diccionario con las métricas
+    ACCURACIES = {'Model': [], 'Accuracy': [], 'Train Score': [], 'Test Score': []}
+    
+    X = df.drop(columns=['satisfaction'])
+    y = df['satisfaction']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+    LR = LogisticRegression()
+    LR.fit(X_train, y_train)
+    y_pred = LR.predict(X_test)
+
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.4f}\n")
+
+    # Matriz de confusión
+    cm = confusion_matrix(y_test, y_pred)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=LR.classes_)
+    disp.plot()
+    plt.title(f"Confusion Matrix {model}")
+    
+    train_score = LR.score(X_train, y_train)
+    test_score = LR.score(X_test, y_test)
+
+    print(f"Train Accuracy Score: {train_score:.4f}")
+    print(f"Test Accuracy Score: {test_score:.4f}")
+
+    ACCURACIES['Model'].append(model)
+    ACCURACIES['Accuracy'].append(accuracy)
+    ACCURACIES['Train Score'].append(train_score)
+    ACCURACIES['Test Score'].append(test_score)
+
+    return pd.DataFrame(ACCURACIES, columns=[i for i in ACCURACIES.keys()])
 
 
 def generate_index_folds(num_rows:int, folds:int) -> np.ndarray:
@@ -175,10 +216,12 @@ data = pd.concat([data, original_dataset['satisfaction']], axis=1) #axis=1 para 
 #data = select_pca(df_min_max, 12)
 #data = pd.concat([data, original_dataset['satisfaction']], axis=1) #axis=1 para concatenar por columnas
 
-"Creating the models dataframe"
+"Creating the models"
 k_list = [1, 3, 5, 7, 9, 11]
 knn, dt = create_models_df(k_list, data, 5)
+lr = LR_model(data, 'Logistic Regression')
 
 #Guardamos el dataframe en un archivo csv
 knn.to_csv('knn_metrics.csv', index=False)
 dt.to_csv('dt_metrics.csv', index=False)
+lr.to_csv('lr_metrics.csv', index=False)

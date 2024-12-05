@@ -115,7 +115,6 @@ df_preprocessed_min_max[numeric_columns] = min_max_scaler.fit_transform(df_prepr
 standard_scaler = StandardScaler()
 df_preprocessed_standard[numeric_columns] = standard_scaler.fit_transform(df_preprocessed_standard[numeric_columns])
 
-
 '''
 #SHOW ACCURACIES
 '''

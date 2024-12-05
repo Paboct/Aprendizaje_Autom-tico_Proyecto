@@ -60,6 +60,7 @@ y = data_original.iloc[:,-1].values
 
 #Minmax
 df_minmax = pd.read_csv('train_students_preprocessed_minmax.csv')
+
 #Eliminamos la columna de etiquetas
 df_minmax = df_minmax.drop(columns='satisfaction')
 
@@ -104,12 +105,10 @@ plt.figure(figsize=(14, 16))
 plt.suptitle("SHAP values for the best features selected by KBEST", fontsize=10)
 
 plt.subplot(2, 1, 1)
-#shap.plots.beeswarm(shap_values_minmax, max_display=16, show=False)
 shap.summary_plot(shap_values_minmax, df_min_max_best, plot_type="bar", color="red", show=False)
 plt.title("MinMaxScaler - Best 10 Features")
 
 plt.subplot(2, 1, 2)
-#shap.plots.beeswarm(shap_values_standard, max_display=16, show=False)
 shap.summary_plot(shap_values_standard, df_standard_best, plot_type="bar", color="blue", show=False)
 plt.title("StandardScaler - Best 10 Features")
 
