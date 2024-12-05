@@ -8,9 +8,9 @@ train_students_prep_minmax -> Hecho
  
 train_students_prep_standard -> Hecho
 
-decisive_model -> 'Acabado'
+decisive_model -> Hecho
 
-APS_Solver -> 'Acabado'
+APS_Solver -> Hecho
 
 characteristics_selection.py -> Acabado
 
