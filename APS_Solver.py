@@ -30,19 +30,10 @@ class APS_Solver:
                                   labels=['Joven', 'Adulto Joven', 'Adulto', 'Adulto Mayor'])
         df['Distance Range'] = pd.cut(df['Flight Distance'], bins=[0, 500, 1500, 3000, 5000, 10000],
                                       labels=['Short', 'Medium', 'Long', 'Very Long', 'Ultra Long'])
-        df['Comfort Total'] = df[['Seat comfort', 'Inflight entertainment', 'Inflight service',
-                                  'Leg room service', 'On-board service', 'Cleanliness',
-                                  'Food and drink', 'Baggage handling', 'Checkin service',
-                                  'Inflight wifi service', 'Ease of Online booking',
-                                  'Departure/Arrival time convenient', 'Gate location']].mean(axis=1)
         
         df['Total Delay'] = df['Arrival Delay in Minutes'] + df['Departure Delay in Minutes']
 
-        df.drop(columns=['Age', 'Flight Distance', 'Seat comfort', 'Inflight entertainment',
-                         'Inflight service', 'Leg room service', 'On-board service', 'Cleanliness',
-                         'Food and drink', 'Baggage handling', 'Checkin service',
-                         'Inflight wifi service', 'Ease of Online booking',
-                         'Departure/Arrival time convenient', 'Gate location', 'Arrival Delay in Minutes',
+        df.drop(columns=['id','Age', 'Flight Distance', 'Arrival Delay in Minutes',
                          'Departure Delay in Minutes'], inplace=True)
 
         # Handle missing values
